@@ -1,0 +1,3 @@
+#!/bin/bash
+
+postProcess -fields "(U)" -func rosMag > log.postProcess

@@ -1,0 +1,187 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    rbc
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+
+    rbc2
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+    // inlet
+    // {
+    //     type            codedFixedValue;
+    //     value           uniform (0 0 0);
+    //     name            inlet;
+    //     code            #{
+    //         // compute inlet pressure as cosine ramp
+    //         // get time
+    //         const scalar t = this->db().time().value();
+
+            
+
+    //         const scalar p1 = $$UMAX$$;
+    //         const scalar p0 = 0.0; // p1*1e-2;
+    //         // const scalar v1 = $$WALLV$$;
+    //         const scalar v0 = 0.0;
+    //         const scalar t1 = $$TIME$$;
+    //         const scalar t0 = 0.0;
+    //         const scalar PI = 3.14159265358979323846;
+
+    //         const scalar delta_p = p1 - p0;
+    //         const scalar delta_v = v1 - v0;
+    //         const scalar delta_t = t1 - t0;
+
+    //         const scalar rpipe = $$RADIUS$$;
+
+    //         const fvPatch& boundaryPatch = patch();
+    //         const vectorField& Cf = boundaryPatch.Cf();
+    //         vectorField& field = *this;
+
+    //         // we assume that the wall velocity, if it changes, is similar to the inlet
+    //         scalar Umax = 0.0;
+    //         scalar Uwall = 0.0;
+
+    //         if (t < t0) {
+    //             Uwall = v0;
+    //             Umax = p0;
+    //         }
+    //         else if (t < t1) {
+    //             auto dt = (t - t0)/delta_t;
+    //             auto out = p0 + delta_p * (1 - cos(dt*PI)) / 2.0;
+    //             // Uwall = v0 + delta_v * (1 - cos(dt*PI)) / 2.0;
+    //             Umax = out;
+    //         } else {
+    //             // Uwall = v1;
+    //             Umax = p1;
+    //         }
+
+    //         // compute inlet velocity
+    //         forAll(Cf, faceI)
+    //         {
+    //             const scalar y = Cf[faceI].y();
+    //             const scalar z = Cf[faceI].z();
+    //             const scalar r = sqrt(z*z + y*y);
+    //             const scalar U = Umax * (1 - powf(r/rpipe, 2.0)) + Uwall;
+    //             // cout << " " << r << " " << U << " " << r/rpipe << "    " << endl;
+    //             field[faceI] = vector(U, 0, 0);
+    //         }
+    //     #};
+    // }
+
+    inlet
+    {
+        type            testInletFlow;
+        value           uniform (0 0 0);
+
+        u_max           $$UMAX$$;
+        time_interval      $$TIME$$;
+        r_pipe          $$RADIUS$$;
+    }
+
+    back
+    {
+        type            wedge;
+    }
+
+    // wall
+    // {
+    //     type            codedFixedValue;
+    //     value           uniform (0 0 0);
+    //     name            wall;
+    //     code            #{
+    //         // compute inlet pressure as cosine ramp
+    //         // get time
+    //         const scalar t = this->db().time().value();
+
+    //         const scalar v1 = $$WALLV$$;
+    //         const scalar v0 = 0.0;
+    //         const scalar t1 = $$TIME$$;
+    //         const scalar t0 = 0.0;
+    //         const scalar PI = 3.14159265358979323846;
+
+    //         const scalar delta_v = v1 - v0;
+    //         const scalar delta_t = t1 - t0;
+
+    //         const scalar rpipe = $$RADIUS$$;
+
+    //         const fvPatch& boundaryPatch = patch();
+    //         const vectorField& Cf = boundaryPatch.Cf();
+    //         vectorField& field = *this;
+
+    //         scalar Uwall = 0.0;
+
+    //         if (t < t0) {
+    //             Uwall = v0;
+    //         }
+    //         else if (t < t1) {
+    //             auto dt = (t - t0)/delta_t;
+    //             Uwall = v0 + delta_v * (1 - cos(dt*PI)) / 2.0;
+    //         } else {
+    //             Uwall = v1;
+    //         }
+
+    //         operator==(vector(Uwall, 0, 0));
+    //     #};
+    // }
+
+    wall
+    {
+        type            terminalRheo;
+        value           uniform (0 0 0);
+        tolerance       1e-11;
+
+        forceDict
+        {
+            type            forces;
+            patches         (rbc rbc2);
+    
+            rho             rhoInf;
+            rhoInf          1.0e-18;
+            origin          (0 0 0);
+            coordinateRotation
+            {
+                type        axesRotation;
+                e1          (1 0 0);
+                e2          (0 1 0);
+            }
+        }    
+    }
+
+    front
+    {
+        type            wedge;
+    }
+}
+
+
+// ************************************************************************* //

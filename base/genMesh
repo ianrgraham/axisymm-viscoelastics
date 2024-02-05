@@ -1,0 +1,5 @@
+#!/bin/bash
+rm -r constant/polyMesh
+cp -r constant/polyMesh.inc constant/polyMesh
+# rotateMesh "(0 1 0)" "(0 0.99619469809 -0.08715574274)"
+rotateMesh "(0 1 0)" "(0 0.99904822158 -0.04361938736)"

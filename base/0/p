@@ -1,0 +1,99 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Website:  https://openfoam.org                  |
+|   \\  /    A nd           | Version:  9                                     |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       volScalarField;
+    object      p;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -2 0 0 0 0];
+
+internalField   uniform 0;
+
+boundaryField
+{
+    inlet
+    {
+        type            zeroGradient;
+        // type           codedFixedValue;
+        // value          uniform 0;
+
+        // name           inlet;
+        // code
+        // #{
+        //     // compute inlet pressure as cosine ramp
+        //     // get time
+        //     const scalar t = this->db().time().value();
+
+        //     const scalar p1 = 3e14;
+        //     const scalar p0 = 0.0; // p1*1e-2;
+        //     const scalar t1 = 3.0;
+        //     const scalar t0 = 0.0;
+        //     const scalar PI = 3.14159265358979323846;
+
+        //     const scalar delta_p = p1 - p0;
+        //     const scalar delta_t = t1 - t0;
+
+        //     if (t < t0) {
+        //         operator==(p0);
+        //     }
+        //     else if (t < t1) {
+        //         auto dt = (t - t0)/delta_t;
+        //         auto out = p0 + delta_p * (1 - cos(dt*PI)) / 2.0;
+        //         operator==(out);
+        //     } else {
+        //         operator==(p1);
+        //     }
+        // #};
+    }
+   
+    wall
+    {
+	type            zeroGradient;       
+    }
+
+    rbc
+    {
+	type            zeroGradient;       
+    }
+
+    rbc2
+    {
+	type            zeroGradient;       
+    }
+
+    outlet
+    {
+	type            fixedValue;
+	value           uniform 0;      
+    }
+
+    front
+    {
+        type wedge;
+    }
+
+    back
+    {
+        type wedge;
+    }
+
+    // symA
+    // {
+    //     type symmetryPlane;
+    // }
+
+    // symB
+    // {
+    //     type symmetryPlane;
+    // }
+}
+
+// ************************************************************************* //

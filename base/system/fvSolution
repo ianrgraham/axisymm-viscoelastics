@@ -1,0 +1,131 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Website:  https://openfoam.org                  |
+|   \\  /    A nd           | Version:  9                                     |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+coupledSolvers
+{  
+  Uptau
+  {
+    solveCoupledUp true;
+    solveCoupledTau false;
+    
+    saveSystem true;
+    robustSumCheck  false;
+    updatePrecondFrequency 10000;  
+    updateMatrixCoeffs false;   
+  }
+}
+
+solvers
+{
+    // "p"
+    // {
+    //     solver           GAMG;
+    //     preconditioner   DILU;
+    //     smoother         DIC;
+    //     tolerance        1e-8;
+    //     relTol           0.;
+    //     minIter          0;
+    //     maxIter          200;
+        
+    // }
+
+    // "U"
+    // {
+    //     solver           PBiCGStab;
+    //     preconditioner   DIC;
+    //     tolerance        1e-8;
+    //     relTol           0.;
+    //     minIter          0;
+    //     maxIter          200;
+        
+    // }
+
+    // "(p|U)"
+    // {
+    //     solver           PCG;
+    //     preconditioner   DIC;
+    //     tolerance        1e-8;
+    //     relTol           0.;
+    //     minIter          0;
+    //     maxIter          800;
+        
+    // }
+
+    // "(thetaM1|tauM1|thetaM2|tauM2|theta|tau|C|A)"
+    // {
+
+    //     solver           PBiCG;
+    //     preconditioner
+    //     {
+    //         preconditioner DILU;
+    //     }
+
+    //     tolerance         1e-8;
+    //     relTol            0.;
+    //     minIter           0;
+    //     maxIter           200;
+    // }
+
+    "(theta|tau)"
+    {
+
+        solver           PBiCG;
+        preconditioner
+        {
+            preconditioner DILU;
+        }
+
+        tolerance         1e-10;
+        relTol            0;
+        minIter           0;
+        maxIter           1000;
+    }
+ 
+}
+
+ 
+
+SIMPLE
+{
+    // nInIter         1;
+    nNonOrthogonalCorrectors 0;
+    pRefCell        0;
+    pRefValue       0;
+
+    residualControl
+    {
+        
+    }
+}
+
+relaxationFactors
+{
+    // 0.2 for everything will work in psuedo-transient case, but it takes too long for sims to converge
+    fields
+     {        
+	    p 	0.8;
+     }
+
+    equations
+     { 
+       U 	0.8;
+       tau	0.8;
+       theta 	0.8;
+       A    0.8;
+       C	0.1;
+     }
+}
+
+// ************************************************************************* //

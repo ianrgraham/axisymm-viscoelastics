@@ -1,0 +1,125 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Website:  https://openfoam.org                  |
+|   \\  /    A nd           | Version:  9                                     |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+libs ("libterminalRheoFvPatchVectorField.so");
+libs ("libinletFlowFvPatchVectorField.so");
+
+application     rheoFoam;
+
+startFrom       startTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         $$TOTALTIME$$;
+
+deltaT          1e-4;
+
+writeControl    timeStep;
+
+writeInterval   30000;
+
+purgeWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  12;
+
+timeFormat      general;
+
+timePrecision   10;
+
+graphFormat     raw;
+
+runTimeModifiable yes;
+
+// adjustTimeStep on;
+
+// maxCo          0.1;
+
+// maxDeltaT      0.001;
+
+functions
+{
+  forces0
+  {
+    type            rheoForces;
+    libs            ("librheoForces.so");
+    patches         (rbc);
+
+    /* log             yes; */
+
+    rho         rhoInf;
+    rhoInf      1e-18;
+    origin          (0 0 0);
+    coordinateRotation
+    {
+        type        axesRotation;
+        e1          (1 0 0);
+        e2          (0 1 0);
+    }
+
+    // writeControl    writeTime;
+    writeControl timeStep;
+    writeInterval 100;
+  }
+
+  forces1
+  {
+    type            rheoForces;
+    libs            ("librheoForces.so");
+    patches         (rbc2);
+
+    /* log             yes; */
+
+    rho         rhoInf;
+    rhoInf      1e-18;
+    origin          (0 0 0);
+    coordinateRotation
+    {
+        type        axesRotation;
+        e1          (1 0 0);
+        e2          (0 1 0);
+    }
+
+    // writeControl    writeTime;
+    writeControl timeStep;
+    writeInterval 100;
+  }
+
+  // forces1
+  // {
+  //   type            betterForces;
+  //   libs            ("libbetterForces.so");
+  //   patches         (rbc);
+
+  //   /* log             yes; */
+
+  //   rho         rhoInf;
+  //   rhoInf      1e-18;
+  //   origin          (0 0 0);
+  //   coordinateRotation
+  //   {
+  //       type        axesRotation;
+  //       e1          (1 0 0);
+  //       e2          (0 1 0);
+  //   }
+
+  //   // writeControl    writeTime;
+  //   writeControl timeStep;
+  //   writeInterval 100;
+  // }
+}

@@ -1,0 +1,66 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Website:  https://openfoam.org                  |
+|   \\  /    A nd           | Version:  9                                     |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    format      ascii;
+    class       dictionary;
+    object      sampleDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+type coded;
+libs ("libutilityFunctionObjects.so");
+
+// Name of on-the-fly generated functionObject
+name rosMag;
+
+codeOptions  // To try to fix the above files not found, but does not work
+#{
+    -std=c++17 \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    -I$(LIB_SRC)/functionObjects/forces/lnInclude \
+    -I$(LIB_SRC)/meshTools/lnInclude
+#};
+
+// include files
+codeInclude
+#{
+
+#};
+
+codeExecute
+#{
+    const volVectorField& U = mesh().lookupObject<volVectorField>("U");
+    const DimensionedField<scalar, volMesh>& V(mesh().V());
+    const volVectorField& C(mesh().C());
+    const vector vmin(-2.0, -4, -4);
+    const vector vmax(2.0, 4, 4);
+
+    volScalarField strainRate(sqrt(2.0)*mag(symm(fvc::grad(U))));
+
+    scalar volume = 0.0;
+    scalar value = 0.0;
+
+    forAll(U, i)
+    {
+        const vector& center = C[i];
+        if (center.x() > vmin.x() && center.y() > vmin.y() && center.z() > vmin.z() && center.x() < vmax.x() && center.y() < vmax.y() && center.z() < vmax.z()) {
+            const scalar vol = V[i];
+            volume += vol;
+            value += vol*strainRate[i];
+        }
+    }
+
+    value /= volume;
+
+    // Write
+    Info << "rosMag: " << value << endl;
+    Info << "Wi: " << value*0.1 << endl;
+#};
+
+writeControl    writeTime;
