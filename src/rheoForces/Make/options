@@ -1,0 +1,31 @@
+EXE_INC = \
+    -std=c++17 \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    -I$(LIB_SRC)/MomentumTransportModels/incompressible/lnInclude \
+    -I$(LIB_SRC)/MomentumTransportModels/momentumTransportModels/lnInclude \
+    -I$(LIB_SRC)/functionObjects/forces/lnInclude \
+    -I$(LIB_SRC)/transportModels/lnInclude \
+    -I$(LIB_SRC)/MomentumTransportModels/compressible/lnInclude \
+    -I$(LIB_SRC)/MomentumTransportModels/phaseIncompressible/lnInclude \
+    -I$(LIB_SRC)/MomentumTransportModels/phaseCompressible/lnInclude \
+    -I$(LIB_SRC)/thermophysicalModels/basic/lnInclude \
+    -I$(LIB_SRC)/meshTools/lnInclude \
+    -I$(LIB_SRC)/triSurface/lnInclude \
+    -I$(LIB_SRC)/twoPhaseModels/twoPhaseMixture/lnInclude \
+    -I$(LIB_SRC)/twoPhaseModels/interfaceProperties/lnInclude \
+    -I$(RHEOTOOL_DIR)/of90/src/libs/constitutiveEquations/lnInclude \
+    -I$(RHEOTOOL_DIR)/of90/src/libs/EDFModels/lnInclude \
+    -I$(RHEOTOOL_DIR)/of90/src/libs/thermo/lnInclude 
+LIB_LIBS = \
+    -lOpenFOAM \
+    -lforces \
+    -lfiniteVolume \
+    -lfieldFunctionObjects \
+    -lmeshTools \
+    -ltwoPhaseMixture \
+    -linterfaceProperties \
+    -ltriSurface \
+    -L$(FOAM_USER_LIBBIN) -lconstitutiveEquations \
+    -L$(FOAM_USER_LIBBIN) -lEDFModels \
+    -L$(FOAM_USER_LIBBIN) -lthermoRheoTool \
+    -L$(FOAM_USER_LIBBIN) -lBCRheoTool

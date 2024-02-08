@@ -1,0 +1,1 @@
+Fixed force calculation for constituitive equation so that the viscous and polymer forces have the correct sign.

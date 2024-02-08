@@ -1,0 +1,27 @@
+EXE_INC = \
+    -std=c++17 \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    -I$(LIB_SRC)/meshTools/lnInclude \
+    -I../rheoForcesv2 \
+    -I../terminalRheo \
+    -I$(RHEOTOOL_DIR)/of90/src/libs/constitutiveEquations/lnInclude \
+    -I$(RHEOTOOL_DIR)/of90/src/libs/EDFModels/lnInclude \
+    -I$(RHEOTOOL_DIR)/of90/src/libs/thermo/lnInclude 
+LIB_LIBS = \
+    -lOpenFOAM \
+    -lfiniteVolume \
+    -lfieldFunctionObjects \
+    -lmeshTools \
+    -L$(FOAM_USER_LIBBIN) -lrheoForcesv2 \
+    -L$(FOAM_USER_LIBBIN) -lterminalRheoFvPatchVectorField \
+    -lOpenFOAM \
+    -lforces \
+    -lfiniteVolume \
+    -lfieldFunctionObjects \
+    -lmeshTools \
+    -ltwoPhaseMixture \
+    -linterfaceProperties \
+    -ltriSurface \
+    -L$(FOAM_USER_LIBBIN) -lconstitutiveEquations \
+    -L$(FOAM_USER_LIBBIN) -lEDFModels \
+    -L$(FOAM_USER_LIBBIN) -lthermoRheoTool

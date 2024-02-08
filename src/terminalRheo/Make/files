@@ -1,0 +1,3 @@
+terminalFvPatchVectorField.C
+
+LIB = $(FOAM_USER_LIBBIN)/libterminalRheoFvPatchVectorField

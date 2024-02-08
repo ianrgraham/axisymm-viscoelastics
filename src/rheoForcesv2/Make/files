@@ -1,0 +1,3 @@
+rheoForcesv2.C
+
+LIB = $(FOAM_USER_LIBBIN)/librheoForcesv2
